@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Assignment-8
+    </title>
+
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root'); 
+
+        // Declared & Assigned
+        const colors = [
+            {
+                color: "red",
+                symbols: ["energy", "strength", "power", "courage"]
+            },
+
+            {
+                color: "blue",
+                symbols: ["loyalty", "trust", "stability", "confidence"]
+            },
+
+            {
+                color: "orange",
+                symbols: ["excitment", "fun", "haste", "action"]
+            },
+
+            {
+                color: "green",
+                symbols: ["cheerfulness", "happiness", "joy", "optimism"]
+            }
+        ];
+
+        // function expression for li's
+        const res = Object.keys(colors).map(function(ele,index){
+            console.log(ele);
+
+            const res1 = colors[ele].symbols;
+            console.log(res1);
+
+            // For CSS colors
+            const colorValues = colors[ele].color;
+            console.log(colorValues);
+
+            const myStyle = {
+                color:colorValues,
+                fontSize:'1.3rem'
+            }
+
+            return (res1.map(function(ele1,index){
+                console.log(ele1);
+
+                // Inline CSS Style
+                return <li key={index} style={myStyle}>{ele1}</li>;
+            }))
+        })
+        
+        // function expression
+        const result = function(props){
+            return(
+                <div>
+
+                    <h1>
+                        All Colors
+                    </h1>
+
+                    <ol>
+
+                        {
+                            colors.map(function(ele,index){
+                                return <li key={index} style={{fontSize:'1.3rem'}}>{ele.color[0].toUpperCase() + ele.color.slice(1)}</li>
+                            })
+                        }
+                        
+                    </ol>
+
+                    <h2>
+                        All Symbols 
+                    </h2>
+
+                    <ol>
+                        {
+                            res
+                        }
+                    </ol>
+
+                </div>
+            )
+        }
+
+        ReactDOM.render(result(colors),rootElement);
+        
+    </script>
+</body>
+
+</html>

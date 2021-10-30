@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Assignment-1
+    </title>
+
+    <!-- Internal CSS -->
+    <style>
+        table,
+        th,
+        td {
+            /* border:size style color */
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+
+        th {
+            color: lightcoral;
+        }
+
+        td{
+            text-align: center;
+        }
+
+        
+    </style>
+
+</head>
+
+<body>
+
+    <hr/>
+    <div id="root">
+
+    </div>
+
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        const users = [
+        { "id": 1, "email": "george@gmail.com", "first_name": "George", "avatar":
+        "https://randomuser.me/api/portraits/men/32.jpg" },
+
+        { "id": 2, "email": "weaver@gmail.com", "first_name": "Weaver", "avatar":
+        "https://randomuser.me/api/portraits/men/46.jpg" },
+
+        { "id": 3, "email": "wong@gmail.com", "first_name": "Wong", "avatar":
+        "https://randomuser.me/api/portraits/men/36.jpg" },
+
+        { "id": 4, "email": "eve@gmail.com", "first_name": "Eve", "avatar":
+        "https://randomuser.me/api/portraits/women/79.jpg" }
+        ]
+
+        const result = function(users){
+            return(
+                <div> 
+                    
+                    <h1>
+                        Listing Users - {users.length}
+                    </h1>
+
+                    <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                id
+                            </th>
+
+                            <th>
+                                Avatar
+                            </th>
+
+                            <th>
+                                First Name
+                            </th>
+
+                            <th>
+                                Email 
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {
+                            users.map(function(ele){
+                                return (
+                                    <tr key={ele.id}>
+
+                                        <td>
+                                            {ele.id}
+                                        </td>
+
+                                        <td>
+                                            <img src={ele.avatar} alt={ele.first_name}/>
+                                        </td>
+
+                                        <td>
+                                            {ele.first_name}
+                                        </td>
+
+                                        <td>
+                                            {ele.email}
+                                        </td>
+
+                                    </tr>
+                                )
+                            })
+                        }
+
+                    </tbody>
+
+                </table>
+                    
+                </div>
+            )
+        }
+        
+        ReactDOM.render(result(users),rootElement);
+        
+    </script>
+</body>
+
+</html>

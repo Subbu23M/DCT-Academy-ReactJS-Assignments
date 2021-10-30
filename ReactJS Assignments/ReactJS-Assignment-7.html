@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Assignment-7 
+    </title>
+
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+        
+        //Declared & Assigned
+        const colors = [
+            {
+                color: "red",
+                symbols: ["energy", "strength", "power", "courage"]
+            },
+
+            {
+                color: "blue",
+                symbols: ["loyalty", "trust", "stability", "confidence"]
+            },
+
+            {
+                color: "orange",
+                symbols: ["excitment", "fun", "haste", "action"]
+            },
+
+            {
+                color: "yellow",
+                symbols: ["cheerfulness", "happiness", "joy", "optimism"]
+            }
+        ];
+
+        // function expression
+        const result = function(props){
+            return (
+                <div>
+
+                    <h1>
+                        Colors & it's symbol
+                    </h1>
+
+                    {
+                        Object.keys(colors).map(function(ele,index){
+                            // console.log(colors[ele].symbols);
+                            const arrayColors = colors[ele].symbols;
+                            console.log(arrayColors);
+
+                            /*
+                            Array(4) [ "energy", "strength", "power", "courage" ]
+                            Array(4) [ "loyalty", "trust", "stability", "confidence" ]
+                            Array(4) [ "excitment", "fun", "haste", "action" ]
+                            Array(4) [ "cheerfulness", "happiness", "joy", "optimism" ]
+                            */
+
+                            // For CSS colors
+                            const colorValues = colors[ele].color;
+                            console.log(colorValues);
+
+                            const myStyle = {
+                                color:colorValues
+                            }
+
+                            // function expression
+                            const liMaker = function(arrayColors){
+                                const emptyArray1 = [];
+
+                                arrayColors.forEach(function(ele,index){
+                                    emptyArray1.push(<li key={index}>{ele}</li>)
+                                })
+                                return emptyArray1;
+                            }
+
+                            return (
+                                <div key={index}>
+
+                                    {/* ReactJS Inline CSS Styling */}
+                                    <h3 style={myStyle}>
+                                        {colors[ele].color.toUpperCase()}
+                                    </h3>
+
+                                    <ol style={{fontSize:'1.2rem'}}>
+
+                                        {
+                                            liMaker(arrayColors)
+                                        }
+
+                                    </ol>
+
+                                </div>
+                            )
+                        })
+                    }
+
+                </div>
+            )
+        }
+
+        ReactDOM.render(result(colors),rootElement);
+    </script>
+</body>
+
+</html>

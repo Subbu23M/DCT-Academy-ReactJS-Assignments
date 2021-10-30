@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Assignment-3
+    </title>
+
+</head>
+
+<body>
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+        
+        // Declared & Assigned
+        const color = {
+            // property:value
+            red: ["energy", "strength", "power", "courage"]
+        }
+
+        // function expression
+        const result = function(ele){
+
+            // Declared & Assigned
+            const emptyArray = [];
+
+            // We use for...in loop to iterate on every property in the object and display the value
+            for(const key in color){
+
+                console.log(color[key]); //["energy","strength","power","courage"]
+                // We use join(', ') to method to convert array to string.
+
+                emptyArray.push(<h1 key={key}> {key[0].toUpperCase() + key.slice(1)} - {color[key].join(', ')}</h1>)
+            }
+            return emptyArray;
+        }
+
+        ReactDOM.render(result(color),rootElement);
+        
+    </script>
+</body>
+
+</html>
