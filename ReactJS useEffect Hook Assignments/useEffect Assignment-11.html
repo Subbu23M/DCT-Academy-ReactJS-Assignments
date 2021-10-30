@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-11</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+
+        input,textarea:focus{
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState,useEffect} = React;
+
+        /* If we are reading or writing data to Local Storage it is Side Effect to component. */
+
+        // parent component
+        function App(props){
+
+            // State variable & function
+            const[data,setData] = useState([]);
+
+            // Here we are not maintaining Backend API. So store Data {} in Local Storage.
+            // If data is not available in localStorage it returns {Data:[]}
+
+            const useEffectFunc = function(){
+
+                const result = JSON.parse(localStorage.getItem('Data')) || []
+
+                // Invoke state function
+                setData(result);
+            }
+
+            // Invoke useEffect Hook - renders only once
+            useEffect(useEffectFunc,[]);
+
+            // Now store data into local storage when State variable is updated
+            useEffect(function(){
+                localStorage.setItem('Data',JSON.stringify(data))
+            },[data]);
+
+            // Pass Callback function to Child through props 
+            const dataFunc = function(data){
+
+                // Spread Operator - ES6
+                const result = [...data,data];
+
+                // Invoke State function
+                setData(result);
+            }
+
+            return(
+                <div className='mt-2'>
+
+                    <h1 className='text-danger text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Form Persist
+                    </h2>
+
+                    {/* Child component Instance-1 */}
+                    <FormData
+                        callBackFunc = {dataFunc}
+                    />
+                    
+                    {/* Child component Instance-2 */}
+                    <DataDisplay
+                        data={data}
+                    />
+
+                </div>
+            )
+        }
+
+        // child component-1
+        function FormData(props){
+
+            // Object Destructuring - ES6
+            const{callBackFunc} = props;
+
+            // State variable & function to make form as controlled inputs
+            const[title,setTitle] = useState('');
+            
+            // Event Handler as callback function
+            const handleChangeTitle = function(e){
+                const inputValue = e.target.value;
+                
+                // Invoke State function
+                setTitle(inputValue);
+            }
+            
+            // State variable & function to make form as controlled inputs
+            const[text,setText] = useState('');
+            
+            // Event Handler as callback function
+            const handleText = function(e){
+                const inputText = e.target.value;
+                
+                // Invoke State function
+                setText(inputText);
+            }
+
+            // Event Handler as callback function
+            const handleSubmit = function(e){
+                e.preventDefault();
+
+                const result = {
+                    // To make unique ID
+                    id:new Date().getTime().toString(),
+
+                    Title : title,
+                    Body:text
+                }
+                // console.log(result);
+
+                // Invoke callBack function send data from child to parent
+                callBackFunc(result);
+                
+                // To reset the form when form is submitted
+                setTitle('');
+                setText('');
+            }
+
+            // Event Handler as callback function for reload
+            const handleReload = function(e){
+                window.location.reload;
+            }
+
+            return(
+                <React.Fragment>
+
+                    <h3 className='text-warning ml-2 text-capitalize'>
+                        story book 
+                    </h3>
+
+                    <form className='ml-2' autoComplete='off'>
+
+                        {/* 1 */}
+                        <label> Title </label> <br/>
+
+                        <input 
+                            type="text" 
+                            className='form-control-sm'
+                            value={title}
+                            onChange={handleChangeTitle}
+                        /> <br/> <br/>
+
+                        {/* 2 */}
+                        <label>Body</label> <br/>
+
+                        <textarea className='form-control-sm' rows='3' value={text} onChange={handleText} ></textarea> <br/> <br/>
+
+                        {/* For Buttons */}
+                        <div className="buttons d-flex justify-content-start align-items-center">
+
+                            {/* For Submit Button */}
+                            <input type="submit" value="save" onClick={handleSubmit}
+                                className='btn btn-primary btn-md mr-3' 
+                            /> <br />
+
+                            {/* For Reload Button */}
+                            <input type="submit" value="reload" onClick={handleReload}
+                                className='btn btn-warning btn-md' 
+                            /> <br />
+
+                        </div>
+
+                    </form>
+
+                </React.Fragment>
+            )
+        }
+
+        // child component - 3 
+        function DataDisplay(props){
+
+            // Object Destructuring - ES6
+            const{data} = props;
+
+            return(
+                <React.Fragment>
+
+                    {
+                        data.map(function(ele){
+
+                            // Object Destructuring - ES6
+                            const{id,Title,Body} = ele;
+
+                            return(
+
+                                <article key={id} className='ml-2 mt-2'>
+
+                                    <h1>
+                                        {Title}
+                                    </h1>
+
+                                    <p className='lead'>
+                                        {Body}
+                                    </p>
+
+                                </article>
+                                    
+                            )
+                        })
+                    }
+
+                    
+                </React.Fragment>
+
+            )
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

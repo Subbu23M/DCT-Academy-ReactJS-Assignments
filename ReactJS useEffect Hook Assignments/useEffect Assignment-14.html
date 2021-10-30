@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-14</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState,useEffect} = React;
+
+        // parent component
+        function App(props){
+
+            return(
+                <div className='mt-2 ml-2'>
+
+                    <h1 className='text-danger text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Dashboard of JSON placeholder
+                    </h2>
+
+                    <hr/>
+
+                    {/* Child component instances */}
+                    <UsersDataLength/>
+
+                    <PostsDataLength/>
+
+                    <TodosDataLength/>
+
+                </div>
+            )
+        }
+
+        // child component - 1 
+        function UsersDataLength(props){
+
+            const baseUrl = 'https://jsonplaceholder.typicode.com/users';
+
+            // State variable & function
+            const[data,setData] = useState([]);
+            // console.log(data);
+
+            // AJAX Life Cycle - Asynchronous Nature
+            const useFunc = function(){
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                        // console.log(response);
+
+                        const fetchResult = response.data;
+
+                        // Invoke State function
+                        setData(fetchResult);
+                    })
+
+                    .catch(function(error){
+                        console.log(error.message);
+                    })
+            }
+
+            // Invoke useEffect Hook
+            useEffect(useFunc,[]);
+
+            return(
+                <React.Fragment>
+
+                    <h3>
+                        Users - {data.length}
+                    </h3>
+                    
+                </React.Fragment>
+            )
+        }
+
+        // child component - 2 
+        function PostsDataLength(props){
+
+            const baseUrl = 'https://jsonplaceholder.typicode.com/posts?userId/';
+
+            // State variable & function
+            const[data,setData] = useState([]);
+            // console.log(data);
+
+            // AJAX LifeCycle - Asynchronous Nature
+            const useFunc = function(){
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                        // console.log(response);
+
+                        const fetchResult = response.data;
+
+                        // Invoke State function
+                        setData(fetchResult);
+                    })
+
+                    .catch(function(error){
+                        console.log(error.message);
+                    })
+            }
+
+            // Invoke useEffect Hook
+            useEffect(useFunc,[]);
+
+            return(
+                <React.Fragment>
+
+                    <h3>
+                        Posts - {data.length}
+                    </h3>
+                    
+                </React.Fragment>
+            )
+            
+        }
+
+        // child component - 3  
+        function TodosDataLength(props){
+
+            const baseUrl = 'https://jsonplaceholder.typicode.com/todos?userId/';
+
+            // State variable & function
+            const[data,setData] = useState([]);
+            // console.log(data);
+
+            // AJAX Life Cycle - Asynchronous Nature
+            const useFunc = function(){
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                        // console.log(response);
+
+                        const fetchResult = response.data;
+
+                        // Invoke State function
+                        setData(fetchResult);
+                    })
+
+                    .catch(function(error){
+                        console.log(error.message);
+                    })
+            }
+
+            // Invoke useEffect Hook
+            useEffect(useFunc,[]);
+
+            return(
+                <React.Fragment>
+
+                    <h3>
+                        Todos - {data.length}
+                    </h3>
+                    
+                </React.Fragment>
+            )
+
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

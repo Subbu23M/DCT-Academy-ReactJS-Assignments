@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-6</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+
+        input:focus{
+            outline: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState} = React;
+
+        // parent component
+        function App(props){
+
+            // State variable & function for Response object & error message
+            const[responseObject,setResponseObject] = useState({});
+            const[error,setError] = useState('');
+
+            // Event Handler as callback function-1 
+            const handleSuccess = function(responseObject){
+                // Invoke state function
+                setResponseObject(responseObject);
+
+                // To reset the screen when result is achieved
+                setError('');
+            }
+
+            // Event Handler as callback function-2 
+            const handleError = function(error){
+                // Invoke state function
+                setError(error);
+
+                // To reset the screen when record is not found 
+                setResponseObject({});
+            }
+
+            return(
+                <React.Fragment>
+
+                    <h1 className='text-danger mt-2 text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Search User by Email
+                    </h2>
+
+                    {/* Child component instance-1 */}
+                    <DisplayData
+                        handleSuccess = {handleSuccess}
+                        handleFailure={handleError}
+                    />
+                    
+                    {/* Child component instance-2 */}
+                    <DisplayResult
+                        successData={responseObject}
+                        failureData={error}
+                    />
+
+                </React.Fragment>
+            )
+        }
+
+        // child component-1
+        function DisplayData(props){
+
+            // Object Destructuring - ES6 passing cb's from Parent to Child
+            const{handleSuccess,handleFailure} = props;
+
+            const baseURL = 'https://jsonplaceholder.typicode.com/users';
+
+            // State variable & function to make form as controlled inputs
+            const[emailId,setEmail] = useState('');
+
+            // Event Handler as callback function - 1 
+            const handleEmail = function(e){
+                const inputValue = e.target.value;
+                
+                // Invoke state function
+                setEmail(inputValue);
+            }
+
+            // Event Handler as callback function - 2 
+            const handleClick = function(e){
+                e.preventDefault();
+
+                // Fetch Data from API
+                axios 
+                    .get(baseURL)
+
+                    .then(function(response){
+                        const result = response.data;
+
+                        // Find unique email
+                        const resObject = result.find(function(ele){
+                            // console.log(ele);
+
+                            // Object Destructuring - ES6
+                            const{email} = ele;
+
+                            // Comparison with user input
+                            return email === emailId + '';
+                        })
+                        // console.log(resObject);
+
+                        // Conditional rendering Simple...if Passing data to parent component
+                        {
+                            Object.keys(resObject).length > 0 && handleSuccess(resObject)
+                        }
+
+                        // To reset input field when data is fetched from API
+                        setEmail('');
+
+                    })
+
+                    .catch(function(error){
+                        // passing data to parent component
+                        handleFailure(error.message);
+                    })
+            }
+            
+            return(
+                <React.Fragment>
+
+                    <form>
+
+                        {/* 1 */}
+                        <div className="form-group ml-2">
+
+                            <input 
+                                type="email" 
+                                className="form-control-sm"  
+                                placeholder="Enter email"
+                                value={emailId}
+                                onChange={handleEmail}
+                            />
+
+                            
+                        </div>
+                        
+                        <button type="submit" onClick={handleClick} className="btn btn-sm text-light ml-2 btn-primary">Search</button>
+
+                    </form>
+
+                </React.Fragment>
+
+            )
+        }
+
+        // child component - 2 
+        function DisplayResult(props){
+            // Object Destructuring - ES6 received data from parent component
+            const{successData,failureData} = props;
+
+            return(
+                <React.Fragment>
+
+                    {/* Conditional Rendering - Simple...if */}
+
+                    {/* For Success */}
+                    {
+                        (Object.keys(successData).length > 0) && <h3 className='mt-2 ml-2 text-success'> {successData.name} - {successData.email} - {successData.address.city} </h3>
+                    }
+
+                    {/* For Error */}
+                    {
+                        failureData && <p className='mt-2 ml-2 lead text-danger'> Record not found </p>
+                    }
+
+                </React.Fragment>
+
+            )
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

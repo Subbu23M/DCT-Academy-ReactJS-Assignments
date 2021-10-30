@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-4</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState,useEffect} = React;
+
+        // parent component
+        function App(props){
+
+            // Two State variables to store response object and error message
+            const[responseData,setResponseData] = useState({});
+            const[errorMessage,setErrorMessage] = useState('');
+
+            // Event Handler as callback function - 1 
+            const handleSuccess = function(responseObject){
+                // Invoke state function
+                setResponseData(responseObject);
+
+                // To clear the previous message
+                setErrorMessage('')
+            }
+
+            // Event Handler as callback function - 2 
+            const handleFailure = function(errorMessage){
+                // Invoke state function
+                setErrorMessage(errorMessage);
+
+                // To clear the previous message
+                setResponseData({})
+            }
+
+            return(
+                <div className='mt-2'>
+
+                    <h1 className='text-danger text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Show Single User
+                    </h2>
+
+                    {/* Child component instance - 1 */}
+                    <SingleUserData 
+                    successResult = {handleSuccess}
+                    failureResult = {handleFailure}
+                    />
+                    
+                    {/* Child component instance - 2 */}
+                    <DisplayData
+                        successData = {responseData}
+                        failureData = {errorMessage}
+                    />
+
+                </div>
+            )
+        }
+
+        // child component - 1
+        function SingleUserData(props){
+            // Object Destructuring - ES6
+            const{successResult,failureResult} = props;
+
+            // We can change id number here users/2 or 3.....
+            const baseUrl = `https://jsonplaceholder.typicode.com/users/1`
+
+            // Fetch Data from API
+            const singleDataMaker = function(){
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                        // console.log(response);
+
+                        const fetchResult = response.data;
+
+                        // Pass Data from child to parent through callback function
+                        successResult(fetchResult)
+                    })
+                    
+                    .catch(function(error){
+                        // Pass Data from child to parent through callback function
+                        failureResult(error)
+                    })
+            }
+            // Invoke useEffect Hook
+            useEffect(singleDataMaker,[]);
+
+            return(
+                <React.Fragment>
+
+                </React.Fragment>
+            )
+        }
+
+        // child component - 2 
+        function DisplayData(props){
+            // Object Destructuring - ES6
+            const{successData,failureData} = props;
+
+            // console.log(successData);
+
+            return(
+                <React.Fragment>
+
+                    {
+                        Object.keys(successData).length > 0 && <h3 className='ml-2 text-muted'>
+                            {successData.name} - {successData.email} - {successData.address.city}
+                        </h3>
+                    }
+
+                </React.Fragment>
+            )
+
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

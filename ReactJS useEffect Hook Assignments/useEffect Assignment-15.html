@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-15</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState,useEffect} = React;
+
+        // parent component
+        function App(props){
+
+            // Two State variables to store response object and error message
+            const[responseData,setResponseData] = useState({});
+            const[errorMessage,setErrorMessage] = useState('');
+
+            // Event Handler as callback function - 1 to receive data from child component
+            const handleSuccess = function(responseData){
+                // Invoke State function
+                setResponseData(responseData);
+
+                // To clear previous message on screen
+                setErrorMessage('');
+            }
+
+            // Event Handler as callback function - 1 to receive data from child component
+            const handleFailure = function(errorMessage){
+                // Invoke state function
+                setErrorMessage(errorMessage);
+
+                // To clear previous result on screen
+                setResponseData({});
+            }
+
+            return(
+                <div className='mt-2 ml-2'>
+
+                    <h1 className='text-danger text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        User city based on location
+                    </h2>
+
+                    <hr/>
+
+                    {/* Child Component instance-1 passing callback functions through props */}
+                    <GetDetails
+                        resultData = {handleSuccess}
+                        failureData = {handleFailure}
+                    />
+
+                    {/* Child Component instance-2 passing state variables through props */}
+                    <DisplayLatLngCity
+                        successData = {responseData}
+                        failureMessage = {errorMessage}
+                    />
+
+                </div>
+            )
+        }
+
+        // child component - 1
+        function GetDetails(props){
+            // Object Destructuring - ES6
+            const{resultData,failureData} = props;
+
+            const baseUrl = 'https://ipgeolocation.abstractapi.com/v1/?api_key=89e6c7d267234d118916b0443c0b5131';
+
+            // Event Handler as callback function
+            const handleClick = function(){
+
+                // AJAX Life Cycle - Asynchronous nature
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                        // console.log(response);
+
+                        const fetchResult = response.data;
+                        // console.log(fetchResult);
+
+                        // Passing data to Parent component
+                        resultData(fetchResult);
+                    })
+                    
+                    .catch(function(error){
+                        // console.log(error);
+                        
+                        // Passing data to Parent component
+                        failureData(error.message)
+                    })
+            }
+
+            return(
+                <React.Fragment>
+
+                    <button className='btn btn-outline-warning text-dark btn-md' onClick={handleClick}>
+                        Get Location 
+                    </button>
+
+                </React.Fragment>
+            )
+        }
+
+        // Child component - 2 
+        function DisplayLatLngCity(props){
+            // Object Destructuring - ES6
+            const{successData,failureMessage} = props;
+
+            // console.log(successData);
+            
+            return(
+                <React.Fragment>
+
+                    <h3 className='mt-2'>
+                        Latitude - {successData.latitude}
+                    </h3>
+                    
+                    <h3>
+                        Longitude - {successData.longitude}
+                    </h3>
+                    
+                    <h3>
+                        City - {successData.city}
+                    </h3>
+                    
+                </React.Fragment>
+            )
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-13</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState,useEffect} = React;
+
+        // parent component
+        function App(props){
+            return(
+                <React.Fragment>
+
+                    <h1 className='text-danger text-center mt-2 mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Catch Evens
+                    </h2>
+
+                    {/* Child component instance */}
+                    <CatchEven/>
+
+                </React.Fragment>
+            )
+        }
+
+        // child component
+        function CatchEven(props){
+
+            // State variable & function
+            const[num,setNum] = useState(0);
+
+            const[evenNums,setEvenNums] = useState([]);
+
+            const [count,setCount]=useState(0)
+
+            // CallBack function
+            const useEffectFunc = function(){
+
+                // Declared
+                let countTime;
+
+                // Main Logic
+                const timeoutID = function(){
+                    // Generate random numbers
+                    const randomNum = Math.round(Math.random() * 100);
+
+                    // Simple...if conditional statement
+                    if(randomNum % 2 === 0){
+                        // ES6 - Spread Operator
+                        const result = [...evenNums];
+
+                        result.push(randomNum);
+
+                        // Invoke State function
+                        setEvenNums(result);
+                    }
+                    // Invoke State functions
+                    setNum(randomNum);
+                    setCount(count + 1);
+                }
+
+                // 1) Start function
+                const startExecution = function(){
+                    // reassigned
+                    // setTimeout(callback function,milliseconds)
+                    countTime = setTimeout(timeoutID,1000);
+                }
+
+                // 2) Stop function
+                const stopExecution = function(){
+                    clearTimeout(countTime);
+                }
+
+                // Invoke function
+                startExecution();
+
+                // Break Interval
+                if(count === 25){
+                    // Invoke function
+                    stopExecution()
+                }
+                
+            }
+
+            // Invoke useEffect Hook
+            useEffect(useEffectFunc,[num]);
+
+            return(
+                <React.Fragment>
+
+                    <h3 className='text-danger ml-2'>
+                        {num}
+                    </h3>
+
+                    <p className='lead text-capitalize ml-2'>
+                        all evens - <span className='text-success'> {evenNums.length} </span>
+                    </p>
+
+                    <ul>
+
+                        {/* Conditional Rendering - Simple...if */}
+
+                        {
+                            (evenNums.length > 0) && evenNums.map(function(num,index){
+                                
+                                return(
+                                    <li key={index}>
+                                        {num}
+                                    </li>
+                                )
+
+                            })
+                        }
+
+                    </ul>
+
+                </React.Fragment>
+            )
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

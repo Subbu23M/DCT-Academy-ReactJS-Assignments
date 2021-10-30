@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-5</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState} = React;
+
+        // parent component
+        function App(props){
+
+            // Two State variables to hold success object and error message.
+            const[success,setSuccess] = useState({});
+            const[error,setError] = useState('');
+
+            // Event Handler as callback function-1 
+            const handleSuccess = function(success){
+                // Invoke state function
+                setSuccess(success);
+
+                // To reset the screen when result is achieved
+                setError('');
+            }
+
+            // Event Handler as callback function-2 
+            const handleError = function(error){
+                // Invoke state function
+                setError(error);
+
+                // To reset the screen when record is not found 
+                setSuccess({});
+            }
+
+            return(
+                <div className='mt-2'>
+
+                    <h1 className='text-danger text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Display All Users
+                    </h2>
+
+                    {/* Child component instance-1 */}
+                    <UserForm 
+                        handleResult={handleSuccess} 
+                        handleFailure={handleError} 
+                    />
+                    
+                    {/* Child component instance-2 */}
+                    <UserDetails 
+                        successData={success} 
+                        failureData={error} 
+                    />
+
+                </div>
+            )
+        }
+
+        // child component-1 
+        function UserForm(props){
+            const placeholderText = 'search by id';
+
+            // State variable and function
+            const[idNumber,setIdNumber] = useState('');
+
+            const baseUrl = `https://jsonplaceholder.typicode.com/users/${idNumber}`;
+
+            // From App component
+            const{handleResult,handleFailure} = props;
+
+            // Event Handler as callback function-1 for user input
+            const handleChange = function(e){
+                const userValue = e.target.value;
+                // console.log(typeof userValue);
+
+                // Invoke State function
+                setIdNumber(userValue)
+            }
+
+            // Event Handler as callback function-2 for user clicks and dataFactoring.
+            const handleSubmit = function(e){
+                e.preventDefault();
+
+                // Fetch Data from API
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                    // console.log(response);
+
+                    const fetchResult = response.data;
+                    // console.log(fetchResult);
+
+                    // From child to parent
+                    handleResult(fetchResult);
+                    })
+
+                    .catch(function(error){
+                        // console.dir(error);
+
+                        // console.log(error.message);
+
+                        // From child to parent
+                        handleFailure(error);
+                    })
+            }
+
+            return(
+                <React.Fragment>
+
+                    <form className='ml-2'>
+                        <label> Search By ID </label> <br/>
+
+                        <input 
+                            type="text" 
+                            placeholder={placeholderText} 
+                            value={idNumber}
+                            className='mr-2' 
+                            onChange={handleChange}
+                        />
+
+                        <input 
+                            type="submit" 
+                            value="search"
+                            onClick={handleSubmit}
+                        />
+
+                    </form>
+
+                </React.Fragment>
+            )
+        }
+
+        // child component-2  
+        function UserDetails(props){
+            // Object Destructuring - ES6 from App component
+            const{successData,failureData} = props;
+
+            // console.log(successData);
+            // console.log(failureData);
+
+            return(
+                <React.Fragment>
+
+                    {/* Conditional Rendering - Simple...if */}
+
+                    {/* For Success */}
+                    {
+                        (Object.keys(successData).length > 0) && <h1 className='mt-2 text-success'> {successData.name} - {successData.email} - {successData.address.city} </h1>
+                    }
+
+                    {/* For Error */}
+                    {
+                        failureData && <p className='mt-2 text-danger'> Record not found </p>
+                    }
+
+                </React.Fragment>
+            )
+        }
+        
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

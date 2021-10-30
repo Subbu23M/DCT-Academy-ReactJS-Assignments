@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>useEffect Assignment-1</title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 270px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Axios Dependency -->
+    <script src="https://unpkg.com/axios@0.21.4/dist/axios.min.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState,useEffect} = React;
+
+        // parent component
+        function App(props){
+
+            // Two state variables to store response object and error message
+            const[responseObject,setResponseObject] = useState({});
+            const[errorMessage,setErrorMessage] = useState('');
+
+            // Event Handler as callback function - 1 
+            const handleSuccess = function(responseObject){
+                // Invoke State function
+                setResponseObject(responseObject);
+
+                // To remove error message from screen when result achieved.
+                setErrorMessage('');
+            }
+            
+            // Event Handler as callback function - 2 
+            const handleFailure = function(errorMessage){
+                // Invoke State function
+                setErrorMessage(errorMessage);
+
+                // To remove response when data fails.
+                setResponseObject({});
+            }
+            
+            return(
+                <div className='mt-2'>
+
+                    <h1 className='text-danger text-center mb-0 font-weight-bold'>
+                        useEffect Hook 
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Display All Users
+                    </h2>
+
+                    {/*Child component instance-1 passing data via props */}
+                    <FetchData 
+                    handleSuccess = {handleSuccess}
+                    handleFailure = {handleFailure}
+                    />
+                    
+                    {/*Child component instance-2 passing data via props */}
+                    <DisplayData
+                        successData = {responseObject}
+                        failureResult = {errorMessage}
+                    />
+                </div>
+            )
+        }
+
+        // child component-1
+        function FetchData(props){
+            const baseUrl = 'https://jsonplaceholder.typicode.com/users';
+
+            // Object Destructuring - ES6 From App component callback functions
+            const{handleSuccess,handleFailure} = props;
+
+            const dataMaker = function(){
+                // 1)Send request to API and return Promise Object
+                axios
+                    .get(baseUrl)
+
+                    .then(function(response){
+                        // console.log(response);
+                        const fetchResult = response.data; 
+
+                        // Pass data to parent from child using callback function
+                        handleSuccess(fetchResult);
+                    })
+                    
+                    .catch(function(error){
+                        // Pass data to parent from child using callback function
+                        handleFailure(error)
+                    })
+            }
+
+            // Invoke useEffect Hook
+            useEffect(dataMaker,[]);
+
+            return(
+                <React.Fragment>
+                    
+                </React.Fragment>
+            )
+        }
+
+        // child component-2 
+        function DisplayData(props){
+            // Object Destructuring - ES6 from Parent component
+            const{successData,failureResult} = props; 
+            // console.log(successData);
+
+            return(
+                <React.Fragment>
+
+                    <h3 className='ml-2 text-warning text-center'>
+                        Listing Users - {successData.length}
+                    </h3>
+
+                    {/* Conditional Rendering - Simple...if */}
+
+                    {/* For success data */}
+
+                    {
+                        Object.keys(successData).length > 0 && <table
+                            className='table mt-2 table-bordered table-hover table-sm text-center'>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th scope='col'>
+                                        #
+                                    </th>
+
+                                    <th scope='col'>
+                                        Name
+                                    </th>
+
+                                    <th scope='col'>
+                                        Email
+                                    </th>
+
+                                    <th scope='col'>
+                                        City
+                                    </th>
+
+                                    <th scope='col'>
+                                        Position [latitude,longitude]
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+                                {
+                                    successData.map(function(ele){
+                                        // console.log(ele);
+                                        // Object Destructuring - ES6
+                                        const{id,name,email,address} = ele;
+
+                                        return(
+                                            <tr key={id}>
+
+                                                <td>
+                                                    {id}
+                                                </td>
+
+                                                <td>
+                                                    {name}
+                                                </td>
+
+                                                <td>
+                                                    {email}
+                                                </td>
+
+                                                <td>
+                                                    {address.city}
+                                                </td>
+
+                                                <td>
+                                                    [{address.geo.lat},
+                                                    {address.geo.lng}]
+                                                </td>
+
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+
+                        </table>
+                    }
+
+                    {/* For Failure */}
+                    {failureResult && <p className='text-danger'> Record not found </p> }
+
+                </React.Fragment>
+            )
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>
