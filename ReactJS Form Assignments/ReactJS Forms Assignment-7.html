@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> ReactJS Forms Assignment-7 </title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline {
+            width: 295px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState} = React;
+
+        // Declared & Assigned
+        const tasks = [
+            {
+                id:1,title:'get the website live',completed:true 
+            },
+
+            {
+                id:2,title:'work on user validation',completed:false
+            },
+
+            {
+                id:3,title:'Automate the deployment process',completed:false 
+            }
+        ]
+
+        // parent component
+        function App(props){
+
+            // State variable & function
+            const[data,setData] = useState(tasks);
+            
+            return(
+                <section className='mt-2'>
+
+                    <h1 className='text-danger text-center text-uppercase mb-0 font-weight-bold'>
+                        reactjs forms
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Mark as complete
+                    </h2>
+
+                    {/* Child component instance */}
+                    <Data
+                        objectList = {data}
+                    />
+
+                </section>
+            )
+        }
+
+        // child component
+        function Data(props){
+            // Object Destructuring - ES6
+            const{objectList} = props;
+
+            return(
+                <React.Fragment>
+
+                    <h3 className='text-warning mt-3 ml-2'>
+                        Listing Users- { objectList.length }
+                    </h3>
+
+                    <ol>
+                        {
+                            objectList.map(function(ele){
+                                // console.log(ele);
+
+                                // Object Destructuring - ES6
+                                const{id,title,completed} = ele;
+
+                                // State variable & function to make form controlled inputs
+                                const[complete,setComplete] = useState(completed);
+
+                                // Event Handler as callback function
+                                const handleCheckBox = function(e){
+                                    const inputValue = e.target.checked;
+
+                                    // Invoke state function
+                                    setComplete(inputValue);
+                                }
+
+                                {/* Conditional rendering */}
+                                const liStyle = {
+                                    textDecoration:complete && 'line-through'
+                                }
+
+                                return(
+                                    <li key={id}>
+
+                                        <form>
+
+                                            <input 
+                                                type="checkbox" 
+                                                checked={complete} 
+                                                onChange={handleCheckBox} 
+                                            />
+                                            
+                                            <span
+                                                style={liStyle}
+                                                className='ml-2 text-capitalize'> 
+                                                {title} 
+                                            </span>
+
+                                        </form>
+
+                                    </li>
+                                )
+                            })
+                        }
+                    </ol>
+
+                </React.Fragment>
+            )
+        }
+
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+
+</body>
+
+</html>

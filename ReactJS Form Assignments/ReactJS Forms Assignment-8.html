@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> ReactJS Forms Assignment-8 </title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 295px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState} = React;
+
+        // Declared & Assigned
+        const tasks = [
+            {
+                id:1,title:'get the website live',completed:false 
+            },
+
+            {
+                id:2,title:'work on user validation',completed:false
+            },
+
+            {
+                id:3,title:'Automate the deployment process',completed:false 
+            }
+        ]
+
+        // parent component
+        function App(props){
+
+            return(
+                <div className='mt-2'>
+
+                    <h1 className='text-danger text-center text-uppercase mb-0 font-weight-bold'>
+                        reactjs forms
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Show Progress 
+                    </h2>
+
+                    {/* Child component instance */}
+                    <TasksContainer/>
+
+                </div>
+            )
+        }
+
+        // child component - 1 
+        function TasksContainer(props){
+            
+            return(
+                <React.Fragment>
+
+                    <h3 className='ml-2'>
+                        Listing Tasks - {tasks.length}
+                    </h3>
+
+                    {/* Child component instance */}
+                    <TasksList/>
+
+                </React.Fragment>
+
+            )
+        }
+
+        // child component - 2  
+        function TasksList(props){
+            
+            // Array Destructuring - ES6 State Variable & function
+            const[data,setData] = useState(tasks);
+
+            // State variable and function for ProgressBar
+            const[progress,setProgress] = useState('');
+
+            // Event Handler as callback function
+            const handleCheck = function(e){
+                const inputCheckedValue = e.target.value;
+                // console.log(inputCheckedValue);
+
+                // For completed tasks
+                const result = data.map(function(ele){
+                    // console.log(ele);
+
+                    // Object Destructuring - ES6
+                    const{id,title,completed} = ele;
+
+                    if(title === inputCheckedValue){
+                        return {...ele,completed:!completed}
+                    }else{
+                        return {...ele}
+                    }
+
+                })
+
+                // Invoke State function
+                setData(result);
+
+                // filter completed tasks
+                const filterArr = result.filter(function(ele){
+                    // Object Destructuring - ES6
+                    const{id,title,completed} = ele;
+
+                    return completed;
+                });
+                // Invoke state function
+                setProgress(filterArr);
+            }
+
+            return(
+                <React.Fragment>
+
+                    {/* Child component instance */}
+                    <ProgressBar data = {progress}/>
+
+                    <ul>
+
+                        {
+                            data.map(function(ele){
+                                // console.log(ele);
+
+                                // Object Destructuring - ES6
+                                const{id,title,completed} = ele;
+
+                                {/* Conditional rendering for CSS part */}
+                                const liStyle = {
+                                    textDecoration:completed && 'line-through'
+                                }
+
+                                return(
+                                    <form key={id} className='mt-2'>
+
+                                        <input 
+                                            type="checkbox" 
+                                            value={title}
+                                            checked={completed}
+                                            onChange={handleCheck}
+                                        />
+
+                                        <label style={liStyle} className='ml-2 text-capitalize'> {title} </label>
+
+                                    </form>
+                                )
+                            })
+                        }
+
+                    </ul>
+
+                </React.Fragment>
+
+            )
+
+        }
+
+        // child component-3 
+        function ProgressBar(props){
+            // Object Destructuring - ES6
+            const{data} = props;
+
+            // Find width for progress bar
+            const widthValue = Math.floor((data.length/tasks.length) * 100);
+            // console.log(widthValue);
+
+            return(
+
+                <div className="progress ml-2 bg-warning w-50 mt-3">
+
+                    <div className="progress-bar bg-danger" value={widthValue}
+                        style={{width:`${widthValue}%`,ariaValueMin:'0',ariaValueMax:'100'}}>
+
+                        <span className='text-light'> {`${widthValue}%`} </span>
+
+                    </div>
+
+                </div>
+
+            )
+        }
+        
+        ReactDOM.render(<App/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> ReactJS Forms Assignment-9 </title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 295px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState} = React;
+
+        // Declared & Assigned
+        const tasks = [
+            {
+                id:1,title:'deploy app' , completed:'pending'
+            },
+
+            {
+                id:2,title:'setup database' , completed:'pending'
+            },
+
+            {
+                id:3,title:'create a new app' , completed:'pending'
+            },
+
+            {
+                id:4,title:'deploy app to staging' , completed:'pending'
+            }
+        ]
+
+        // function component
+        function Mark(props){
+
+            // Array Destructuring - ES6
+            const[status,setStatus] = useState(tasks);
+            const[bool,setBool] = useState(false);
+
+            /* 
+                Here,
+                status,bool - State variable
+                setStatus,setBool - State function
+            */
+
+            // Event Handler as callback function
+            const handleChange = function(e){
+
+                /* To Toggle the checkbox */
+                setBool(!bool);
+
+                // To return updated array
+                const result = status.map(function(task){
+
+                    const res = e.target.checked;
+
+                    /* Ternary Operator */
+                    return ((res === false) ? {...task,completed:'pending'} : {...task,completed:'completed'})
+
+                });
+
+                // Invoke State function
+                setStatus(result);
+            }
+
+            return(
+                <div className='mt-2'>
+
+                    <h1 className='text-danger text-center text-uppercase mb-0 font-weight-bold'>
+                        reactjs forms
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Mark All As Complete
+                    </h2>
+
+                    <table className='table mt-2 table-bordered table-light text-dark text-capitalize table-hover table-sm text-center'>
+
+                        <thead>
+
+                            <tr>
+
+                                <th scope='col'>
+                                    <input type="checkbox" checked={bool} onChange={handleChange} />
+                                </th>
+
+                                <th scope='col'>
+                                    Title
+                                </th>
+
+                                <th scope='col'>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+                            {
+                                status.map(function(ele){
+
+                                    // Object Destructuring - ES6
+                                    const{id,title,completed} = ele;
+
+                                    return(
+                                        <tr key={id}>
+
+                                            <td>
+                                                <input type="checkbox" checked={bool} disabled={!false} />
+                                            </td>
+
+                                            <td>
+                                                {title}
+                                            </td>
+
+                                            <td>
+                                                { completed}
+                                            </td>
+
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            )
+        }
+
+        ReactDOM.render(<Mark/>,rootElement);
+
+    </script>
+    
+</body>
+</html>

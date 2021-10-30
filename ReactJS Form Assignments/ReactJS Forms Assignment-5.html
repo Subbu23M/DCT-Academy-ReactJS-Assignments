@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> ReactJS Forms Assignment-5 </title>
+
+    <!-- Title ICON -->
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.VJHsPjqDjAE85lKSCYOR7wHaHa?pid=ImgDet&rs=1">
+
+    <!-- Bootstrap4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS -->
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .underline{
+            width: 295px;
+            height: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependency -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <!-- React DOM Dependency -->
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Babel JS Dependency -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <!-- Internal JS -->
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Object Destructuring - ES6
+        const{useState} = React;
+
+        // Declared & Assigned
+        const users = [
+
+            { id: 1, name: 'empl1', email: 'emp11@gmail.com', selected: false },
+
+            { id: 2, name: 'empl2', email: 'emp12@gmail.com', selected: false },
+
+            { id: 3, name: 'empl3', email: 'emp13@gmail.com', selected: false },
+
+            { id: 4, name: 'empl4', email: 'emp14@gmail.com', selected: false }
+
+        ]
+
+        // function component
+        function ListingEmployees(props){
+
+            // Array Destructuring - ES6
+            const[usersData,setUsersData] = useState(users);
+
+            /*
+            Here,
+            usersData - State variable
+            setUsersData - State function
+            */
+
+            // Event Handler as callback function
+            const handleCheck = function(e){
+                const userInputValue = e.target.value;
+
+                const result = usersData.map(function(emp){
+                    if(emp.name === userInputValue){
+                        return {...emp,selected:!emp.selected}
+                    }else{
+                        return {...emp}
+                    }
+                })
+
+                // Invoke State function
+                setUsersData(result);
+            }
+
+            return(
+                <div className='mt-2 ml-2'>
+
+                    <h1 className='text-danger text-center text-uppercase mb-0 font-weight-bold'>
+                        reactjs forms
+                    </h1>
+
+                    <div className="underline bg-dark mx-auto"></div>
+
+                    <h2 className='text-primary ml-2 mt-2'>
+                        Select Employees
+                    </h2>
+
+                    <h2 className='text-capitalize text-primary'>
+                        listing employees - {usersData.length}
+                    </h2>
+
+                    <table className='table mt-2 table-bordered table-hover table-sm text-center'>
+
+                        <thead>
+
+                            <tr>
+
+                                <th scope='col'>
+                                    #
+                                </th>
+
+                                <th scope='col'>
+                                    Name
+                                </th>
+
+                                <th scope='col'>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {
+                                usersData.map(function(emp){
+                                // console.log(emp);
+                                return(
+                                    <tr key={emp.id}>
+
+                                        <td>
+                                            {emp.id}
+                                        </td>
+
+                                        <td>
+                                            {emp.name}
+                                        </td>
+
+                                        <td>
+                                            <form>
+
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={emp.selected} 
+                                                    value={emp.name}
+                                                    onChange={handleCheck}
+                                                />
+                                                
+                                            </form>
+                                        </td>
+
+                                    </tr>
+                                )})
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                    <hr className='bg-danger'/>
+
+                    <h3>
+                        Selected Employees
+                    </h3>
+
+                    {
+                        usersData.map(function(emp){
+                            return(
+                                <ul key={emp.id}>
+                                    {/*Conditional Rendering Simple...if*/}
+                                    {
+                                        emp.selected && <li> {emp.name} </li>
+                                    }
+                                </ul>
+                            )
+                        })
+                    }
+
+                </div>
+            )
+        }
+
+        ReactDOM.render(<ListingEmployees/>,rootElement);
+
+    </script>
+    
+</body>
+</html>
