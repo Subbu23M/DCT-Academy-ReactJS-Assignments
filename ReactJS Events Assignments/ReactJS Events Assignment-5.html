@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Events Assignment-5
+    </title>
+
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Declared & Assigned
+        const fruits = ['apple', 'water melon', 'strawberry', 'kiwi'];
+
+        // function component as call back function
+        function RandomElement(props){
+            console.log(props);
+
+            // Event Listener as call back function
+            function eventClick(e){
+                // Declared & Assigned
+                const randomElementIndex = Math.floor(Math.random() * fruits.length);
+                
+                alert(fruits[randomElementIndex]);
+            }
+
+            return(
+                <div>
+
+                    <button type='btn' onClick={eventClick}>
+                        Pick random
+                    </button>
+
+                    <ul>
+                        {
+                            props.data.map(function(ele,index){
+                                return <li key={index}> {ele} </li>
+                            })
+                        }
+                    </ul>
+
+                </div>
+                
+            )
+        }
+
+        ReactDOM.render(<RandomElement data={fruits}/>,rootElement);
+
+    </script>
+</body>
+
+</html>

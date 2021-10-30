@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Events Assignment-8
+    </title>
+
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+        
+        // Declared & Assigned
+        const tasks = [
+            { id: 1, title: 'Task 1', isCompleted: true },
+
+            { id: 2, title: 'Task 2', isCompleted: true },
+
+            { id: 3, title: 'Task 3', isCompleted: false }
+        ]
+
+        // function component
+        function FindElement(props){
+            console.log(props);
+
+            // Event Listener as call back function
+            function clickEvent(e){
+
+                // 1)Take input from the user
+                const inputId = prompt('Enter ID');
+                console.log(typeof inputId);
+
+                // 2)Convert explicitly
+                const strToNum = Number(inputId);
+                console.log(typeof strToNum);
+
+                // 3)Use find() to return unique element
+                const result = props.data.find(function(ele){
+                    return ele.id === strToNum;
+                })
+                console.log(result);
+
+                // Using Ternary Operator
+                result ? (alert(`${result.title} - ${result.isCompleted}`)) : alert(`task with id ${strToNum} not found`)
+            }
+
+            return(
+
+                <button type='btn' onClick={clickEvent}>
+                    Find Record by ID
+                </button>
+
+            )
+        }
+
+        ReactDOM.render(<FindElement data={tasks}/>,rootElement);
+
+    </script>
+</body>
+
+</html>

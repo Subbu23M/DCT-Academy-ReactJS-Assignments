@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Events Assignment-1
+    </title>
+
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // function component
+        function GenerateRandom(props){
+
+            // Event Listener as call back function
+            function clickEvent(e){
+                const randomNumber = Math.floor(Math.random() * 100);
+
+                alert(randomNumber);
+            }
+
+            return(
+                <button type='btn' onClick={clickEvent}>
+                    Generate Random Number
+                </button>
+            )
+        }
+
+        ReactDOM.render(<GenerateRandom/>,rootElement)
+
+    </script>
+</body>
+
+</html>

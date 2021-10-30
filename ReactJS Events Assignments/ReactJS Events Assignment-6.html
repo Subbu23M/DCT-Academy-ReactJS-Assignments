@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Events Assignment-6
+    </title>
+
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // function component
+        function TagGenerator(props){
+
+            // Event Listener as call back function
+            function eventClick(e){
+
+                // 1
+                const inputValue = prompt('Enter a string');
+
+                // 2
+                function capitalizeWords(str){
+                    // reassigned
+                    str= str.split(' ');
+                    
+                    // Declared & Assigned
+                    let hashSymbol = '#';
+
+                    for(let i=0;i<str.length;i++){ 
+                        // reassigned
+                        str[i]= str[i].charAt(0).toUpperCase() + str[i].substr(1); 
+                    } 
+                    return hashSymbol + str.join('');
+                }
+
+                // 3)
+                // Local scope variable
+                alert(capitalizeWords(inputValue));
+                
+            }
+
+            return(
+                <button type='btn' onClick={eventClick}>
+                    Enter a string 
+                </button>
+            )
+        }
+
+        ReactDOM.render(<TagGenerator/>,rootElement)
+
+    </script>
+</body>
+
+</html>

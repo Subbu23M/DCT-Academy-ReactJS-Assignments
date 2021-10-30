@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        ReactJS Events Assignment-9
+    </title>
+
+</head>
+
+<body>
+
+    <div id="root">
+    </div>
+
+    <!-- ReactJS Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+
+    <script type="text/babel">
+
+        // Declared & Assigned
+        const rootElement = document.getElementById('root');
+
+        // Declared & Assigned
+        const tasks = [
+
+            { id: 1, title: 'Task 1', isCompleted: true },
+
+            { id: 2, title: 'Task 2', isCompleted: true },
+
+            { id: 3, title: 'Task 3', isCompleted: false },
+
+            { id: 4, title: 'Task 4', isCompleted: false },
+
+            { id: 5, title: 'Task 5', isCompleted: true }
+
+        ]
+
+        // Apply filter() to return array of completed tasks.
+        const completedTasks = tasks.filter(function(ele){
+            return ele.isCompleted;
+        });
+        console.log(completedTasks);
+
+        // Use map method to return titles
+        const titleArrays = completedTasks.map(function(ele){
+            return ele.title;
+        });
+        console.log(titleArrays);
+
+        // Convert array to strings
+        const arrToStr = titleArrays.join(', ');
+        console.log(arrToStr);
+
+        // function component
+        function CompletedTasks(props){
+            console.log(props);
+
+            // Event listener as call back function
+            function clickEvent(e){
+                alert(arrToStr);
+            }
+
+            return(
+
+                <button onClick={clickEvent}>
+                    Show Completed Tasks
+                </button>
+
+            )
+
+        }
+
+        ReactDOM.render(<CompletedTasks data={completedTasks}/>,rootElement);
+
+    </script>
+</body>
+
+</html>
